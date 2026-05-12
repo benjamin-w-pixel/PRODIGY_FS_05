@@ -120,6 +120,7 @@ export default function SocialPlatform() {
     { id: "home", icon: Home, label: "Feed" },
     { id: "search", icon: Search, label: "Explore" },
     { id: "notifications", icon: Bell, label: "Notifications", badge: 3 },
+    { id: "messages", icon: Mail, label: "Messages" },
     { id: "profile", icon: User, label: "Profile" },
   ];
 
@@ -131,7 +132,7 @@ export default function SocialPlatform() {
           <div className="w-10 h-10 rounded-xl bg-gradient-social flex items-center justify-center shadow-lg shadow-primary/20">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-black tracking-tighter">NEXUS<span className="text-primary">SOCIAL</span></h1>
+          <h1 className="text-2xl font-black tracking-tighter">NEXUS<span className="text-primary text-glow">SOCIAL</span></h1>
         </div>
 
         <nav className="flex-1 space-y-2">
@@ -181,7 +182,6 @@ export default function SocialPlatform() {
         <AnimatePresence mode="wait">
           {activeTab === "home" && (
             <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {/* Create Post & Feed logic (already implemented) */}
               <div className="p-6 border-b border-border bg-white/[0.01]">
                 <div className="flex gap-4">
                   <img src={MOCK_USER.avatar} alt="User" className="w-12 h-12 rounded-full border border-white/10" />
@@ -260,6 +260,34 @@ export default function SocialPlatform() {
             </motion.div>
           )}
 
+          {activeTab === "messages" && (
+            <motion.div key="messages" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-[calc(100vh-140px)] flex flex-col">
+              <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide">
+                {[
+                  { id: 1, sender: "Abel Tesfaye", text: "Hey Biniyam! How is Zemen AI coming along?", time: "10:24 AM", mine: false },
+                  { id: 2, sender: "You", text: "It's going great! Just integrated the local neural engine. 🚀", time: "10:25 AM", mine: true },
+                  { id: 3, sender: "Abel Tesfaye", text: "That's huge. Let me know when the beta is out!", time: "10:26 AM", mine: false },
+                ].map(msg => (
+                  <div key={msg.id} className={cn("flex flex-col", msg.mine ? "items-end" : "items-start")}>
+                    <div className={cn(
+                      "max-w-[80%] p-4 rounded-2xl text-sm",
+                      msg.mine ? "bg-primary text-white rounded-tr-none" : "bg-white/10 text-slate-200 rounded-tl-none"
+                    )}>
+                      {msg.text}
+                    </div>
+                    <span className="text-[10px] text-muted mt-1">{msg.time}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="p-4 glass m-4 rounded-3xl flex items-center gap-4">
+                <input type="text" placeholder="Start a new message" className="flex-1 bg-transparent border-none focus:outline-none text-white px-2" />
+                <button className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Send className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
           {activeTab === "profile" && (
             <motion.div key="profile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="h-48 bg-gradient-social relative">
@@ -299,6 +327,25 @@ export default function SocialPlatform() {
 
       {/* Right Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-96 p-6 space-y-8 sticky top-0 h-screen overflow-y-auto scrollbar-hide border-l border-border">
+        {/* Share Platform */}
+        <div className="glass-card rounded-[2rem] p-8 border border-white/5 bg-gradient-to-br from-primary/20 to-secondary/20 relative overflow-hidden group">
+          <div className="relative z-10 space-y-4">
+            <h3 className="text-xl font-black text-white">Invite Friends</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">Share Nexus Social with your fellow developers.</p>
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText("https://nexus-social.app/invite");
+                alert("Invite link copied to clipboard!");
+              }}
+              className="w-full bg-white text-black font-black py-3 rounded-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+            >
+              <Share2 className="w-4 h-4" />
+              Copy Invite Link
+            </button>
+          </div>
+          <Sparkles className="absolute -right-4 -bottom-4 w-24 h-24 text-white/5 group-hover:text-white/10 transition-colors rotate-12" />
+        </div>
+
         <div className="glass-card rounded-[2rem] p-6 space-y-6 bg-white/[0.01]">
           <h3 className="text-xl font-black flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary" /> Trends</h3>
           {["EthiopianTech", "AAU_CS", "NextJS16", "WebDev"].map(tag => (
@@ -308,6 +355,12 @@ export default function SocialPlatform() {
             </div>
           ))}
         </div>
+
+        <footer className="px-4 text-[10px] text-muted space-x-4">
+          <span className="hover:underline cursor-pointer">Terms</span>
+          <span className="hover:underline cursor-pointer">Privacy</span>
+          <p className="mt-2">© 2026 Nexus Social Inc.</p>
+        </footer>
       </aside>
 
       {/* Mobile Navigation */}
