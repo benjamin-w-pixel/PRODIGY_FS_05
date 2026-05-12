@@ -153,101 +153,131 @@ export default function SocialPlatform() {
           </button>
         </header>
 
-        {/* Stories */}
-        <div className="p-6 flex gap-4 overflow-x-auto scrollbar-hide">
-          {STORIES.map((story) => (
-            <div key={story.id} className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer group">
-              <div className={cn(
-                "w-16 h-16 rounded-full p-1 transition-transform group-hover:scale-105",
-                story.mine ? "bg-white/10" : "bg-gradient-social"
-              )}>
-                <div className="w-full h-full rounded-full border-2 border-[#030014] overflow-hidden">
-                  <img src={story.avatar} alt={story.name} className="w-full h-full object-cover" />
-                </div>
-              </div>
-              <span className="text-[10px] font-bold text-muted truncate w-16 text-center">{story.name}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Create Post */}
-        <div className="p-6 border-b border-border">
-          <div className="flex gap-4">
-            <img src={MOCK_USER.avatar} alt="User" className="w-12 h-12 rounded-full" />
-            <div className="flex-1 space-y-4">
-              <textarea 
-                placeholder="What's happening in your tech world?"
-                className="w-full bg-transparent border-none text-xl focus:outline-none resize-none min-h-[100px]"
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-              />
-              <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                <div className="flex gap-4 text-primary">
-                  <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><ImageIcon className="w-5 h-5" /></button>
-                  <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><Smile className="w-5 h-5" /></button>
-                  <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><MapPin className="w-5 h-5" /></button>
-                </div>
-                <button 
-                  disabled={!postContent.trim()}
-                  className="bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-black px-6 py-2 rounded-full transition-all flex items-center gap-2 shadow-lg shadow-primary/20"
-                >
-                  <Send className="w-4 h-4" />
-                  Post
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Posts Feed */}
-        <div className="divide-y divide-border">
-          {MOCK_POSTS.map((post) => (
-            <motion.article 
-              key={post.id} 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="p-6 hover:bg-white/[0.02] transition-colors cursor-pointer"
+        <AnimatePresence mode="wait">
+          {activeTab === "home" ? (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="flex gap-4">
-                <img src={post.user.avatar} alt={post.user.name} className="w-12 h-12 rounded-full" />
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold hover:underline">{post.user.name}</span>
-                      <span className="text-sm text-muted">{post.user.handle}</span>
-                      <span className="text-muted text-xs">•</span>
-                      <span className="text-xs text-muted">{post.time}</span>
+              {/* Stories */}
+              <div className="p-6 flex gap-4 overflow-x-auto scrollbar-hide">
+                {STORIES.map((story) => (
+                  <div key={story.id} className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer group">
+                    <div className={cn(
+                      "w-16 h-16 rounded-full p-1 transition-transform group-hover:scale-105",
+                      story.mine ? "bg-white/10" : "bg-gradient-social"
+                    )}>
+                      <div className="w-full h-full rounded-full border-2 border-[#030014] overflow-hidden">
+                        <img src={story.avatar} alt={story.name} className="w-full h-full object-cover" />
+                      </div>
                     </div>
-                    <button className="text-muted hover:text-white"><MoreHorizontal className="w-5 h-5" /></button>
+                    <span className="text-[10px] font-bold text-muted truncate w-16 text-center">{story.name}</span>
                   </div>
-                  
-                  <p className="text-lg leading-relaxed">{post.content}</p>
+                ))}
+              </div>
 
-                  {post.image && (
-                    <div className="rounded-3xl overflow-hidden border border-border">
-                      <img src={post.image} alt="Post" className="w-full object-cover max-h-[500px]" />
+              {/* Create Post */}
+              <div className="p-6 border-b border-border">
+                <div className="flex gap-4">
+                  <img src={MOCK_USER.avatar} alt="User" className="w-12 h-12 rounded-full" />
+                  <div className="flex-1 space-y-4">
+                    <textarea 
+                      placeholder="What's happening in your tech world?"
+                      className="w-full bg-transparent border-none text-xl focus:outline-none resize-none min-h-[100px]"
+                      value={postContent}
+                      onChange={(e) => setPostContent(e.target.value)}
+                    />
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                      <div className="flex gap-4 text-primary">
+                        <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><ImageIcon className="w-5 h-5" /></button>
+                        <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><Smile className="w-5 h-5" /></button>
+                        <button className="hover:bg-primary/10 p-2 rounded-full transition-colors"><MapPin className="w-5 h-5" /></button>
+                      </div>
+                      <button 
+                        disabled={!postContent.trim()}
+                        className="bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-black px-6 py-2 rounded-full transition-all flex items-center gap-2 shadow-lg shadow-primary/20"
+                      >
+                        <Send className="w-4 h-4" />
+                        Post
+                      </button>
                     </div>
-                  )}
-
-                  <div className="flex items-center justify-between pt-4 text-muted">
-                    <button className="flex items-center gap-2 group hover:text-primary transition-colors">
-                      <div className="p-2 rounded-full group-hover:bg-primary/10"><MessageCircle className="w-5 h-5" /></div>
-                      <span className="text-xs font-bold">{post.comments}</span>
-                    </button>
-                    <button className="flex items-center gap-2 group hover:text-pink-500 transition-colors">
-                      <div className="p-2 rounded-full group-hover:bg-pink-500/10"><Heart className="w-5 h-5" /></div>
-                      <span className="text-xs font-bold">{post.likes}</span>
-                    </button>
-                    <button className="flex items-center gap-2 group hover:text-indigo-400 transition-colors">
-                      <div className="p-2 rounded-full group-hover:bg-indigo-400/10"><Share2 className="w-5 h-5" /></div>
-                    </button>
                   </div>
                 </div>
               </div>
-            </motion.article>
-          ))}
-        </div>
+
+              {/* Posts Feed */}
+              <div className="divide-y divide-border">
+                {MOCK_POSTS.map((post) => (
+                  <motion.article 
+                    key={post.id} 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="p-6 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  >
+                    <div className="flex gap-4">
+                      <img src={post.user.avatar} alt={post.user.name} className="w-12 h-12 rounded-full" />
+                      <div className="flex-1 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold hover:underline">{post.user.name}</span>
+                            <span className="text-sm text-muted">{post.user.handle}</span>
+                            <span className="text-muted text-xs">•</span>
+                            <span className="text-xs text-muted">{post.time}</span>
+                          </div>
+                          <button className="text-muted hover:text-white"><MoreHorizontal className="w-5 h-5" /></button>
+                        </div>
+                        
+                        <p className="text-lg leading-relaxed">{post.content}</p>
+
+                        {post.image && (
+                          <div className="rounded-3xl overflow-hidden border border-border">
+                            <img src={post.image} alt="Post" className="w-full object-cover max-h-[500px]" />
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between pt-4 text-muted">
+                          <button className="flex items-center gap-2 group hover:text-primary transition-colors">
+                            <div className="p-2 rounded-full group-hover:bg-primary/10"><MessageCircle className="w-5 h-5" /></div>
+                            <span className="text-xs font-bold">{post.comments}</span>
+                          </button>
+                          <button className="flex items-center gap-2 group hover:text-pink-500 transition-colors">
+                            <div className="p-2 rounded-full group-hover:bg-pink-500/10"><Heart className="w-5 h-5" /></div>
+                            <span className="text-xs font-bold">{post.likes}</span>
+                          </button>
+                          <button className="flex items-center gap-2 group hover:text-indigo-400 transition-colors">
+                            <div className="p-2 rounded-full group-hover:bg-indigo-400/10"><Share2 className="w-5 h-5" /></div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center justify-center h-[60vh] text-center p-10"
+            >
+              <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mb-6">
+                <Sparkles className="w-10 h-10 text-primary animate-pulse" />
+              </div>
+              <h3 className="text-2xl font-black mb-2">Section Under Construction</h3>
+              <p className="text-muted max-w-xs">Nexus is evolving. This premium section will be available in the next release.</p>
+              <button 
+                onClick={() => setActiveTab("home")}
+                className="mt-6 text-primary font-bold hover:underline"
+              >
+                Return to Feed
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Widgets (Right Sidebar) */}
