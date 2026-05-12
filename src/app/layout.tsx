@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WeatherSphere | Precision Atmospheric Data",
-  description: "Advanced weather monitoring dashboard with real-time global atmospheric data.",
+  title: "Nexus Social | Connect in the Digital Tech Era",
+  description: "A premium social media platform for the next generation of tech enthusiasts and developers.",
 };
 
 export default function RootLayout({
