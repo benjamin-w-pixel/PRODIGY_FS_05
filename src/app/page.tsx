@@ -20,7 +20,10 @@ import {
   Plus,
   Sparkles,
   TrendingUp,
-  Hash
+  Hash,
+  CheckCircle2,
+  Calendar,
+  Link as LinkIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,7 +31,12 @@ import { motion, AnimatePresence } from "framer-motion";
 const MOCK_USER = {
   name: "Biniyam Wegene",
   handle: "@benjamin_w_pixel",
-  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Biniyam"
+  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Biniyam",
+  bio: "4th Year Information Science student @ AAU | Full Stack Developer | Building Zemen AI 🧠 | Certified Software Engineer",
+  location: "Addis Ababa, Ethiopia",
+  joined: "May 2024",
+  following: 142,
+  followers: "1.2K"
 };
 
 const INITIAL_POSTS = [
@@ -61,12 +69,18 @@ const INITIAL_POSTS = [
   }
 ];
 
-const STORIES = [
-  { id: 1, name: "Your Story", avatar: MOCK_USER.avatar, mine: true },
-  { id: 2, name: "Alex", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" },
-  { id: 3, name: "Hanna", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hanna" },
-  { id: 4, name: "Yonas", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Yonas" },
-  { id: 5, name: "Maya", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maya" },
+const EXPLORE_ITEMS = [
+  { id: 1, title: "Tech Addis 2026", category: "Technology", image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" },
+  { id: 2, title: "Next.js 16 Launch", category: "Development", image: "https://images.unsplash.com/photo-1618477247222-acbdb0e159b3?auto=format&fit=crop&q=80&w=600" },
+  { id: 3, title: "AI Revolution", category: "Artificial Intelligence", image: "https://images.unsplash.com/photo-1620712943543-bcc4628c9757?auto=format&fit=crop&q=80&w=600" },
+  { id: 4, title: "AAU Campus Life", category: "University", image: "https://images.unsplash.com/photo-1541339907198-e08756eaa539?auto=format&fit=crop&q=80&w=600" },
+];
+
+const NOTIFICATIONS = [
+  { id: 1, user: "Abel Tesfaye", type: "like", content: "liked your post about Zemen AI", time: "10m ago" },
+  { id: 2, user: "Sara Solomon", type: "follow", content: "started following you", time: "1h ago" },
+  { id: 3, user: "Dev Ethiopia", type: "mention", content: "mentioned you in a post", time: "3h ago" },
+  { id: 4, user: "Prodigy InfoTech", type: "like", content: "liked your repository", time: "5h ago" },
 ];
 
 export default function SocialPlatform() {
@@ -106,19 +120,18 @@ export default function SocialPlatform() {
     { id: "home", icon: Home, label: "Feed" },
     { id: "search", icon: Search, label: "Explore" },
     { id: "notifications", icon: Bell, label: "Notifications", badge: 3 },
-    { id: "messages", icon: Mail, label: "Messages" },
     { id: "profile", icon: User, label: "Profile" },
   ];
 
   return (
-    <div className="min-h-screen flex max-w-[1400px] mx-auto bg-black">
-      {/* Sidebar Navigation (Desktop) */}
+    <div className="min-h-screen flex max-w-[1400px] mx-auto bg-black text-white">
+      {/* Sidebar Navigation */}
       <aside className="hidden md:flex flex-col w-72 p-6 sticky top-0 h-screen border-r border-border">
         <div className="flex items-center gap-2 mb-10 px-2 group cursor-pointer">
           <div className="w-10 h-10 rounded-xl bg-gradient-social flex items-center justify-center shadow-lg shadow-primary/20">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-black tracking-tighter text-white">NEXUS<span className="text-primary">SOCIAL</span></h1>
+          <h1 className="text-2xl font-black tracking-tighter">NEXUS<span className="text-primary">SOCIAL</span></h1>
         </div>
 
         <nav className="flex-1 space-y-2">
@@ -146,74 +159,49 @@ export default function SocialPlatform() {
           ))}
         </nav>
 
-        <div className="mt-auto p-4 rounded-3xl glass-card flex items-center justify-between">
+        <div className="mt-auto p-4 rounded-3xl glass-card flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors">
           <div className="flex items-center gap-3">
             <img src={MOCK_USER.avatar} alt="User" className="w-10 h-10 rounded-full border border-white/10" />
             <div className="hidden lg:block overflow-hidden">
-              <p className="text-sm font-bold truncate text-white">{MOCK_USER.name}</p>
+              <p className="text-sm font-bold truncate">{MOCK_USER.name}</p>
               <p className="text-xs text-muted truncate">{MOCK_USER.handle}</p>
             </div>
           </div>
-          <button className="text-muted hover:text-white">
-            <MoreHorizontal className="w-5 h-5" />
-          </button>
+          <MoreHorizontal className="w-5 h-5 text-muted" />
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 min-w-0 border-r border-border bg-slate-950/20 pb-20 md:pb-0">
         <header className="sticky top-0 z-10 glass px-6 py-4 flex items-center justify-between border-b border-white/5">
-          <h2 className="text-xl font-black uppercase tracking-widest text-white">{activeTab}</h2>
-          <div className="flex items-center gap-4">
-            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-          </div>
+          <h2 className="text-xl font-black uppercase tracking-widest">{activeTab}</h2>
+          <Sparkles className="w-5 h-5 text-primary animate-pulse" />
         </header>
 
         <AnimatePresence mode="wait">
-          {activeTab === "home" ? (
+          {activeTab === "home" && (
             <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {/* Stories */}
-              <div className="p-6 flex gap-4 overflow-x-auto scrollbar-hide border-b border-white/5">
-                {STORIES.map((story) => (
-                  <div key={story.id} className="flex flex-col items-center gap-2 flex-shrink-0 cursor-pointer group">
-                    <div className={cn(
-                      "w-16 h-16 rounded-full p-1 transition-all group-hover:scale-110",
-                      story.mine ? "bg-white/10" : "bg-gradient-social p-[2px]"
-                    )}>
-                      <div className="w-full h-full rounded-full border-2 border-black overflow-hidden">
-                        <img src={story.avatar} alt={story.name} className="w-full h-full object-cover" />
-                      </div>
-                    </div>
-                    <span className="text-[10px] font-bold text-muted truncate w-16 text-center">{story.name}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Create Post */}
+              {/* Create Post & Feed logic (already implemented) */}
               <div className="p-6 border-b border-border bg-white/[0.01]">
                 <div className="flex gap-4">
-                  <img src={MOCK_USER.avatar} alt="User" className="w-12 h-12 rounded-full border border-white/10 shadow-xl" />
+                  <img src={MOCK_USER.avatar} alt="User" className="w-12 h-12 rounded-full border border-white/10" />
                   <div className="flex-1 space-y-4">
                     <textarea 
-                      placeholder="What's happening in your tech world?"
-                      className="w-full bg-transparent border-none text-xl focus:outline-none resize-none min-h-[100px] text-white placeholder:text-muted/50"
+                      placeholder="What's happening?"
+                      className="w-full bg-transparent border-none text-xl focus:outline-none resize-none min-h-[100px] text-white"
                       value={postContent}
                       onChange={(e) => setPostContent(e.target.value)}
                     />
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
                       <div className="flex gap-2">
-                        {[ImageIcon, Smile, MapPin].map((Icon, i) => (
-                          <button key={i} className="hover:bg-primary/10 p-2 rounded-xl transition-colors text-primary">
-                            <Icon className="w-5 h-5" />
-                          </button>
-                        ))}
+                        <button className="hover:bg-primary/10 p-2 rounded-xl transition-colors text-primary"><ImageIcon className="w-5 h-5" /></button>
+                        <button className="hover:bg-primary/10 p-2 rounded-xl transition-colors text-primary"><Smile className="w-5 h-5" /></button>
                       </div>
                       <button 
                         onClick={handlePost}
                         disabled={!postContent.trim()}
-                        className="bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-black px-8 py-2.5 rounded-full transition-all flex items-center gap-2 shadow-lg shadow-primary/20 active:scale-95"
+                        className="bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-black px-8 py-2.5 rounded-full shadow-lg shadow-primary/20 transition-all active:scale-95"
                       >
-                        <Send className="w-4 h-4" />
                         Post
                       </button>
                     </div>
@@ -221,70 +209,89 @@ export default function SocialPlatform() {
                 </div>
               </div>
 
-              {/* Feed */}
               <div className="divide-y divide-white/5">
                 {posts.map((post) => (
-                  <motion.article 
-                    key={post.id} 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-6 hover:bg-white/[0.02] transition-colors"
-                  >
-                    <div className="flex gap-4">
-                      <img src={post.user.avatar} alt={post.user.name} className="w-12 h-12 rounded-full" />
-                      <div className="flex-1 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-white hover:underline cursor-pointer">{post.user.name}</span>
-                            <span className="text-sm text-muted">{post.user.handle}</span>
-                            <span className="text-muted text-xs">• {post.time}</span>
-                          </div>
-                          <button className="text-muted hover:text-white"><MoreHorizontal className="w-5 h-5" /></button>
-                        </div>
-                        <p className="text-lg leading-relaxed text-slate-200">{post.content}</p>
-                        {post.image && (
-                          <div className="rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
-                            <img src={post.image} alt="Post" className="w-full object-cover max-h-[500px]" />
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between pt-4 max-w-sm">
-                          <button className="flex items-center gap-2 group text-muted hover:text-primary transition-colors">
-                            <div className="p-2 rounded-full group-hover:bg-primary/10"><MessageCircle className="w-5 h-5" /></div>
-                            <span className="text-xs font-bold">{post.comments}</span>
-                          </button>
-                          <button 
-                            onClick={() => toggleLike(post.id)}
-                            className={cn(
-                              "flex items-center gap-2 group transition-colors",
-                              post.isLiked ? "text-pink-500" : "text-muted hover:text-pink-500"
-                            )}
-                          >
-                            <div className={cn("p-2 rounded-full", post.isLiked ? "bg-pink-500/10" : "group-hover:bg-pink-500/10")}>
-                              <Heart className={cn("w-5 h-5", post.isLiked && "fill-current")} />
-                            </div>
-                            <span className="text-xs font-bold">{post.likes}</span>
-                          </button>
-                          <button className="p-2 rounded-full text-muted hover:bg-indigo-500/10 hover:text-indigo-400 transition-all">
-                            <Share2 className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.article>
+                  <PostCard key={post.id} post={post} onLike={() => toggleLike(post.id)} />
                 ))}
               </div>
             </motion.div>
-          ) : (
-            <motion.div key="empty" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center h-[70vh] text-center p-10">
-              <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center mb-6 relative">
-                <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping" />
-                <Sparkles className="w-12 h-12 text-primary" />
+          )}
+
+          {activeTab === "search" && (
+            <motion.div key="search" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-6 space-y-6">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
+                <input type="text" placeholder="Explore Tech" className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-primary/50" />
               </div>
-              <h3 className="text-2xl font-black mb-2 text-white">Section Under Construction</h3>
-              <p className="text-muted max-w-xs text-sm">We are refining the {activeTab} experience to meet Nexus standards.</p>
-              <button onClick={() => setActiveTab("home")} className="mt-8 bg-white/5 hover:bg-white/10 text-white font-bold px-8 py-3 rounded-2xl transition-all">
-                Go Back to Feed
-              </button>
+              <div className="grid grid-cols-2 gap-4">
+                {EXPLORE_ITEMS.map(item => (
+                  <div key={item.id} className="relative aspect-[4/5] rounded-3xl overflow-hidden group cursor-pointer">
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex flex-col justify-end">
+                      <p className="text-[10px] font-bold text-primary">{item.category}</p>
+                      <h4 className="font-black text-lg">{item.title}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === "notifications" && (
+            <motion.div key="notifications" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="divide-y divide-white/5">
+              {NOTIFICATIONS.map(notif => (
+                <div key={notif.id} className="p-6 flex gap-4 hover:bg-white/[0.02] transition-colors cursor-pointer">
+                  <div className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center",
+                    notif.type === "like" ? "bg-pink-500/10 text-pink-500" : 
+                    notif.type === "follow" ? "bg-primary/10 text-primary" : "bg-indigo-500/10 text-indigo-400"
+                  )}>
+                    {notif.type === "like" ? <Heart className="w-6 h-6 fill-current" /> : 
+                     notif.type === "follow" ? <User className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <p className="text-slate-200">
+                      <span className="font-bold text-white">{notif.user}</span> {notif.content}
+                    </p>
+                    <p className="text-xs text-muted mt-1">{notif.time}</p>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+
+          {activeTab === "profile" && (
+            <motion.div key="profile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <div className="h-48 bg-gradient-social relative">
+                <div className="absolute -bottom-16 left-6 p-1 bg-black rounded-full">
+                  <img src={MOCK_USER.avatar} alt="Profile" className="w-32 h-32 rounded-full border-4 border-black shadow-2xl" />
+                </div>
+              </div>
+              <div className="mt-20 px-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-2xl font-black flex items-center gap-2">
+                      {MOCK_USER.name} <CheckCircle2 className="w-5 h-5 text-primary fill-current" />
+                    </h3>
+                    <p className="text-muted">{MOCK_USER.handle}</p>
+                  </div>
+                  <button className="px-6 py-2 rounded-full border border-white/20 font-bold hover:bg-white/5 transition-all">Edit Profile</button>
+                </div>
+                <p className="text-slate-300 leading-relaxed">{MOCK_USER.bio}</p>
+                <div className="flex gap-4 text-muted text-sm">
+                  <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {MOCK_USER.location}</span>
+                  <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> Joined {MOCK_USER.joined}</span>
+                </div>
+                <div className="flex gap-6 pb-6 border-b border-white/5">
+                  <p className="text-slate-300"><span className="font-black text-white">{MOCK_USER.following}</span> <span className="text-muted">Following</span></p>
+                  <p className="text-slate-300"><span className="font-black text-white">{MOCK_USER.followers}</span> <span className="text-muted">Followers</span></p>
+                </div>
+                <div className="divide-y divide-white/5">
+                  {posts.filter(p => p.user.handle === MOCK_USER.handle).map(post => (
+                    <PostCard key={post.id} post={post} onLike={() => toggleLike(post.id)} />
+                  ))}
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -292,37 +299,54 @@ export default function SocialPlatform() {
 
       {/* Right Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-96 p-6 space-y-8 sticky top-0 h-screen overflow-y-auto scrollbar-hide border-l border-border">
-        <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-focus-within:text-primary" />
-          <input type="text" placeholder="Search Nexus" className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-primary/50 text-white" />
-        </div>
-
-        <div className="glass-card rounded-[2rem] p-6 border border-white/5 bg-white/[0.01]">
-          <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-white"><TrendingUp className="w-5 h-5 text-primary" />Trends</h3>
-          <div className="space-y-6">
-            {["EthiopianTech", "ZemenAI", "NextJS15", "ProdigyIntern"].map(tag => (
-              <div key={tag} className="cursor-pointer group">
-                <p className="text-[10px] text-muted">Trending in Ethiopia</p>
-                <p className="font-bold text-white group-hover:text-primary transition-colors">#{tag}</p>
-                <p className="text-[10px] text-muted">12.5K Posts</p>
-              </div>
-            ))}
-          </div>
+        <div className="glass-card rounded-[2rem] p-6 space-y-6 bg-white/[0.01]">
+          <h3 className="text-xl font-black flex items-center gap-2"><TrendingUp className="w-5 h-5 text-primary" /> Trends</h3>
+          {["EthiopianTech", "AAU_CS", "NextJS16", "WebDev"].map(tag => (
+            <div key={tag} className="cursor-pointer group">
+              <p className="font-bold group-hover:text-primary">#{tag}</p>
+              <p className="text-xs text-muted">1.2K Posts</p>
+            </div>
+          ))}
         </div>
       </aside>
 
-      {/* Mobile Navigation (Bottom) */}
+      {/* Mobile Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 px-6 py-3 flex items-center justify-between z-50">
         {navItems.map((item) => (
-          <button 
-            key={item.id} 
-            onClick={() => setActiveTab(item.id)}
-            className={cn("p-2 transition-all", activeTab === item.id ? "text-primary scale-125" : "text-muted")}
-          >
+          <button key={item.id} onClick={() => setActiveTab(item.id)} className={cn("p-2 transition-all", activeTab === item.id ? "text-primary scale-125" : "text-muted")}>
             <item.icon className="w-6 h-6" />
           </button>
         ))}
       </nav>
     </div>
+  );
+}
+
+function PostCard({ post, onLike }: { post: any, onLike: () => void }) {
+  return (
+    <article className="p-6 hover:bg-white/[0.02] transition-colors">
+      <div className="flex gap-4">
+        <img src={post.user.avatar} alt={post.user.name} className="w-12 h-12 rounded-full" />
+        <div className="flex-1 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="font-bold hover:underline">{post.user.name}</span>
+              <span className="text-muted text-xs">• {post.time}</span>
+            </div>
+            <MoreHorizontal className="w-5 h-5 text-muted" />
+          </div>
+          <p className="text-slate-200">{post.content}</p>
+          {post.image && <img src={post.image} className="rounded-3xl border border-white/5 w-full object-cover max-h-96" />}
+          <div className="flex gap-8 pt-4">
+            <button onClick={onLike} className={cn("flex items-center gap-2 group transition-colors", post.isLiked ? "text-pink-500" : "text-muted hover:text-pink-500")}>
+              <Heart className={cn("w-5 h-5", post.isLiked && "fill-current")} />
+              <span className="text-xs">{post.likes}</span>
+            </button>
+            <button className="flex items-center gap-2 text-muted hover:text-primary"><MessageCircle className="w-5 h-5" /><span className="text-xs">{post.comments}</span></button>
+            <button className="text-muted hover:text-indigo-400"><Share2 className="w-5 h-5" /></button>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }
