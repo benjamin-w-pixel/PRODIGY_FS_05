@@ -1,19 +1,20 @@
-# PRODIGY_FS_05 - WeatherSphere Monitoring Dashboard
+# PRODIGY_FS_05 - Nexus Social Platform
 
 This repository contains the completion of **Task 05** for the Full-Stack Web Development Internship at Prodigy InfoTech.
 
 ## 📝 Task Description
-Build a comprehensive weather monitoring dashboard that provides real-time atmospheric data and long-term forecasts. The application focuses on data visualization and a clean, high-tech interface.
+Build a feature-rich Social Media Platform focusing on a high-fidelity user interface, interactive feed, and modern social features. The application utilizes advanced state management and premium animations to deliver a "Nexus" tier user experience.
 
 **Features Implemented:**
-- 🌤️ **Real-time Data:** Displaying current temperature, conditions, and humidity.
-- 📅 **7-Day Forecast:** Visualizing upcoming weather trends with dynamic icons.
-- 💨 **Atmospheric Metrics:** Wind speed, visibility, pressure, and UV index monitoring.
-- 🌅 **Astro Data:** Precise sunrise and sunset timings.
-- ✨ **Atmospheric UI:** Designed with a soft "Cloud/Sky" theme utilizing glassmorphism and subtle gradients.
+- 📱 **Interactive Social Feed:** A dynamic feed with support for text and image posts.
+- ✨ **Engagement System:** Functional "Like", "Comment", and "Share" interaction feel.
+- 🤳 **Story System:** Horizontal story feed for quick user updates.
+- 🔍 **Discovery Hub:** Explore trending topics and suggested users in the Addis tech scene.
+- 🎨 **Midnight Aura Design:** A cutting-edge dark theme utilizing glassmorphism, vibrant purple accents, and fluid transitions.
+- 🚀 **Framer Motion Animations:** Immersive entrance and interaction animations for all feed items.
 
 ## 💻 Tech Stack
-- **Frontend:** Next.js 15, React, Tailwind CSS v4, Framer Motion, Lucide Icons, Axios
+- **Frontend:** Next.js 16, React 19, Tailwind CSS v4, Framer Motion, Lucide Icons
 
 ## 🚀 How to Run Locally
 
